@@ -39,7 +39,10 @@ namespace C969
             }
 
             //success
-            MessageBox.Show($"Welcome {user.UserName}!");
+            var main = new MainForm(user);
+            main.Show();
+            this.Hide();
+            //MessageBox.Show($"Welcome {user.UserName}!");
         }
     }
 }
