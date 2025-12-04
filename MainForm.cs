@@ -29,6 +29,7 @@ namespace C969
         private void MainForm_Load(object sender, EventArgs e)
         {
             LoadCustomers();
+            LoadAppointments();
         }
         private void LoadCustomers()
         {
@@ -56,17 +57,98 @@ namespace C969
 
         private void buttonDeleteCustomer_Click(object sender, EventArgs e)
         {
-            if (dataGridCustomers == null)
+            if (dataGridCustomers.CurrentRow == null)
                 return;
 
             var customer = (Customer)dataGridCustomers.CurrentRow.DataBoundItem;
 
             if (MessageBox.Show("Delete customer?", "CONFIRM",
                 MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
                 {
-                //new CustomerRepository().Delete(customer.CustomerID);
-                LoadCustomers();
+                    var repo = new CustomerRepository();
+                    repo.Delete(customer.CustomerID);  
+                    MessageBox.Show("Customer deleted.");
+                    LoadCustomers();
+                    LoadAppointments(); 
                 }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error deleting customer: " + ex.Message);
+                }
+            }
+        }
+
+        private void tabAppointments_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LoadAppointments()
+        {
+            var repo = new AppointmentRepository();
+            var appts = repo.GetAll();
+
+            var view = appts.Select(a => new
+            {
+                a.AppointmentID,
+                a.CustomerName,
+                a.UserName,
+                a.Title,
+                a.Type,
+                Start = TimeZoneInfo.ConvertTimeFromUtc(a.StartUtc, TimeZoneInfo.Local),
+                End = TimeZoneInfo.ConvertTimeFromUtc(a.EndUtc, TimeZoneInfo.Local)
+            }).ToList();
+
+            dataGridViewAppointments.DataSource = view;
+        }
+
+        private void buttonAddAppointment_Click(object sender, EventArgs e)
+        {
+            var form = new AppointmentForm(_currentUser);
+            if (form.ShowDialog() == DialogResult.OK)
+                LoadAppointments();
+        }
+
+        private void buttonEditAppointment_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewAppointments.CurrentRow == null)
+                return;
+
+            int apptId = (int)dataGridViewAppointments.CurrentRow.Cells["AppointmentId"].Value;
+
+            var repo = new AppointmentRepository();
+            var fullList = repo.GetAll();
+            var appt = fullList.First(a => a.AppointmentID == apptId);
+
+            var form = new AppointmentForm(_currentUser, appt);
+            if (form.ShowDialog() == DialogResult.OK)
+                LoadAppointments();
+        }
+
+        private void buttonDeleteAppointment_Click(object sender, EventArgs e)
+        {
+            if (dataGridViewAppointments.CurrentRow == null)
+                return;
+
+            int apptId = (int)dataGridViewAppointments.CurrentRow.Cells["AppointmentId"].Value;
+
+            if (MessageBox.Show("Delete appointment?", "Confirm",
+                MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                try
+                {
+                    var repo = new AppointmentRepository();
+                    repo.Delete(apptId);
+                    MessageBox.Show("Appointment deleted.");
+                    LoadAppointments();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error deleting appointment: " + ex.Message);
+                }
+            }
         }
     }
 }

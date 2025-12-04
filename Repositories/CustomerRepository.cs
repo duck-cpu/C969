@@ -48,5 +48,54 @@ namespace C969.Repositories
             }
             return list;
         }
+        public void Delete(int customerId)
+        {
+            using var conn = DB.GetConnection();
+            conn.Open();
+
+            string sqlDeleteAppointments =
+                "DELETE FROM appointment WHERE customerId = @cid;";
+
+            using (var cmdAppt = new MySqlCommand(sqlDeleteAppointments, conn))
+            {
+                cmdAppt.Parameters.AddWithValue("@cid", customerId);
+                cmdAppt.ExecuteNonQuery();
+            }
+
+            int addressId = 0;
+
+            string sqlGetAddress =
+                "SELECT addressId FROM customer WHERE customerId = @cid;";
+
+            using (var cmdGet = new MySqlCommand(sqlGetAddress, conn))
+            {
+                cmdGet.Parameters.AddWithValue("@cid", customerId);
+                var result = cmdGet.ExecuteScalar();
+                if (result != null)
+                    addressId = Convert.ToInt32(result);
+            }
+
+            string sqlDeleteCustomer =
+                "DELETE FROM customer WHERE customerId = @cid;";
+
+            using (var cmdCust = new MySqlCommand(sqlDeleteCustomer, conn))
+            {
+                cmdCust.Parameters.AddWithValue("@cid", customerId);
+                cmdCust.ExecuteNonQuery();
+            }
+
+            if (addressId > 0)
+            {
+                string sqlDeleteAddress =
+                    "DELETE FROM address WHERE addressId = @aid;";
+
+                using (var cmdAddr = new MySqlCommand(sqlDeleteAddress, conn))
+                {
+                    cmdAddr.Parameters.AddWithValue("@aid", addressId);
+                    cmdAddr.ExecuteNonQuery();
+                }
+            }
+        }
+
     }
 }

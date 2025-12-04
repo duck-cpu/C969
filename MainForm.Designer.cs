@@ -35,11 +35,17 @@
             buttonAddCustomer = new Button();
             dataGridCustomers = new DataGridView();
             tabAppointments = new TabPage();
+            buttonAddAppointment = new Button();
+            buttonEditAppointment = new Button();
+            buttonDeleteAppointment = new Button();
+            dataGridViewAppointments = new DataGridView();
             tabCalendar = new TabPage();
             tabReports = new TabPage();
             tabScheduler.SuspendLayout();
             tabCustomers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridCustomers).BeginInit();
+            tabAppointments.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewAppointments).BeginInit();
             SuspendLayout();
             // 
             // tabScheduler
@@ -111,6 +117,10 @@
             // 
             // tabAppointments
             // 
+            tabAppointments.Controls.Add(buttonAddAppointment);
+            tabAppointments.Controls.Add(buttonEditAppointment);
+            tabAppointments.Controls.Add(buttonDeleteAppointment);
+            tabAppointments.Controls.Add(dataGridViewAppointments);
             tabAppointments.Location = new Point(8, 46);
             tabAppointments.Name = "tabAppointments";
             tabAppointments.Padding = new Padding(3);
@@ -118,6 +128,47 @@
             tabAppointments.TabIndex = 1;
             tabAppointments.Text = "Appointments";
             tabAppointments.UseVisualStyleBackColor = true;
+            tabAppointments.Click += tabAppointments_Click;
+            // 
+            // buttonAddAppointment
+            // 
+            buttonAddAppointment.Location = new Point(968, 520);
+            buttonAddAppointment.Name = "buttonAddAppointment";
+            buttonAddAppointment.Size = new Size(150, 46);
+            buttonAddAppointment.TabIndex = 4;
+            buttonAddAppointment.Text = "Add";
+            buttonAddAppointment.UseVisualStyleBackColor = true;
+            buttonAddAppointment.Click += buttonAddAppointment_Click;
+            // 
+            // buttonEditAppointment
+            // 
+            buttonEditAppointment.Location = new Point(1124, 520);
+            buttonEditAppointment.Name = "buttonEditAppointment";
+            buttonEditAppointment.Size = new Size(150, 46);
+            buttonEditAppointment.TabIndex = 3;
+            buttonEditAppointment.Text = "Edit";
+            buttonEditAppointment.UseVisualStyleBackColor = true;
+            buttonEditAppointment.Click += buttonEditAppointment_Click;
+            // 
+            // buttonDeleteAppointment
+            // 
+            buttonDeleteAppointment.Location = new Point(1280, 520);
+            buttonDeleteAppointment.Name = "buttonDeleteAppointment";
+            buttonDeleteAppointment.Size = new Size(150, 46);
+            buttonDeleteAppointment.TabIndex = 1;
+            buttonDeleteAppointment.Text = "Delete";
+            buttonDeleteAppointment.UseVisualStyleBackColor = true;
+            buttonDeleteAppointment.Click += buttonDeleteAppointment_Click;
+            // 
+            // dataGridViewAppointments
+            // 
+            dataGridViewAppointments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewAppointments.Dock = DockStyle.Top;
+            dataGridViewAppointments.Location = new Point(3, 3);
+            dataGridViewAppointments.Name = "dataGridViewAppointments";
+            dataGridViewAppointments.RowHeadersWidth = 82;
+            dataGridViewAppointments.Size = new Size(1430, 511);
+            dataGridViewAppointments.TabIndex = 0;
             // 
             // tabCalendar
             // 
@@ -149,6 +200,8 @@
             tabScheduler.ResumeLayout(false);
             tabCustomers.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridCustomers).EndInit();
+            tabAppointments.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridViewAppointments).EndInit();
             ResumeLayout(false);
         }
 
@@ -163,5 +216,9 @@
         private Button buttonAddCustomer;
         private DataGridView dataGridCustomers;
         private Button buttonDeleteCustomer;
+        private DataGridView dataGridViewAppointments;
+        private Button buttonEditAppointment;
+        private Button buttonDeleteAppointment;
+        private Button buttonAddAppointment;
     }
 }
