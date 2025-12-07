@@ -2,6 +2,7 @@
 using C969.Models;
 using Microsoft.VisualBasic.ApplicationServices;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Asn1.Mozilla;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -154,6 +155,51 @@ namespace C969.Repositories
                     StartUtc = reader.GetDateTime("start"),
                     EndUtc = reader.GetDateTime("end"),
                     Type = reader.GetString("type")
+                });
+            }
+
+            return list;
+        }
+
+        public List<Appointment> GetInRange(DateTime startUtc, DateTime endUtc)
+        {
+            var list = new List<Appointment>();
+
+            using var conn = DB.GetConnection();
+            conn.Open();
+
+            string sql =
+                "SELECT a.appointmentId, a.customerId, a.userId, a.title, a.description, " +
+                "a.location, a.contact, a.type, a.url, a.start, a.end, " +
+                "c.customerName, u.userName " +
+                "FROM appointment a " +
+                "JOIN customer c ON a.customerId = c.customerId " +
+                "JOIN user u ON a.userId = u.userId " +
+                "WHERE a.start >= @start AND a.start < @end;";
+
+            using var cmd = new MySqlCommand(sql, conn);
+            cmd.Parameters.AddWithValue("@start", startUtc);
+            cmd.Parameters.AddWithValue("@end", endUtc);
+
+            using var reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                list.Add(new Appointment
+                {
+                    AppointmentID = reader.GetInt32("appointmentId"),
+                    CustomerID = reader.GetInt32("customerId"),
+                    UserID = reader.GetInt32("userId"),
+                    Title = reader.GetString("title"),
+                    Description = reader.GetString("description"),
+                    Location = reader.GetString("location"),
+                    Contact = reader.GetString("contact"),
+                    Type = reader.GetString("type"),
+                    Url = reader.GetString("url"),
+                    StartUtc = reader.GetDateTime("start"),
+                    EndUtc = reader.GetDateTime("end"),
+                    CustomerName = reader.GetString("customerName"),
+                    UserName = reader.GetString("userName")
                 });
             }
 

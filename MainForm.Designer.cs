@@ -41,11 +41,15 @@
             dataGridViewAppointments = new DataGridView();
             tabCalendar = new TabPage();
             tabReports = new TabPage();
+            monthCalendarAppointments = new MonthCalendar();
+            dataGridViewCalendarAppointments = new DataGridView();
             tabScheduler.SuspendLayout();
             tabCustomers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridCustomers).BeginInit();
             tabAppointments.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewAppointments).BeginInit();
+            tabCalendar.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewCalendarAppointments).BeginInit();
             SuspendLayout();
             // 
             // tabScheduler
@@ -172,6 +176,8 @@
             // 
             // tabCalendar
             // 
+            tabCalendar.Controls.Add(dataGridViewCalendarAppointments);
+            tabCalendar.Controls.Add(monthCalendarAppointments);
             tabCalendar.Location = new Point(8, 46);
             tabCalendar.Name = "tabCalendar";
             tabCalendar.Size = new Size(1436, 635);
@@ -188,6 +194,26 @@
             tabReports.Text = "Reports";
             tabReports.UseVisualStyleBackColor = true;
             // 
+            // monthCalendarAppointments
+            // 
+            monthCalendarAppointments.CalendarDimensions = new Size(3, 1);
+            monthCalendarAppointments.Dock = DockStyle.Top;
+            monthCalendarAppointments.Location = new Point(0, 0);
+            monthCalendarAppointments.MaxSelectionCount = 1;
+            monthCalendarAppointments.Name = "monthCalendarAppointments";
+            monthCalendarAppointments.TabIndex = 0;
+            monthCalendarAppointments.DateSelected += monthCalendarAppointments_DateSelected;
+            // 
+            // dataGridViewCalendarAppointments
+            // 
+            dataGridViewCalendarAppointments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCalendarAppointments.Dock = DockStyle.Bottom;
+            dataGridViewCalendarAppointments.Location = new Point(0, 335);
+            dataGridViewCalendarAppointments.Name = "dataGridViewCalendarAppointments";
+            dataGridViewCalendarAppointments.RowHeadersWidth = 82;
+            dataGridViewCalendarAppointments.Size = new Size(1436, 300);
+            dataGridViewCalendarAppointments.TabIndex = 1;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(13F, 32F);
@@ -202,6 +228,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridCustomers).EndInit();
             tabAppointments.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridViewAppointments).EndInit();
+            tabCalendar.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)dataGridViewCalendarAppointments).EndInit();
             ResumeLayout(false);
         }
 
@@ -220,5 +248,7 @@
         private Button buttonEditAppointment;
         private Button buttonDeleteAppointment;
         private Button buttonAddAppointment;
+        private MonthCalendar monthCalendarAppointments;
+        private DataGridView dataGridViewCalendarAppointments;
     }
 }

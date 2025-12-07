@@ -30,6 +30,9 @@ namespace C969
         {
             LoadCustomers();
             LoadAppointments();
+
+            //load todays appointments on calendar
+            LoadCalendarForDate(DateTime.Now);
         }
         private void LoadCustomers()
         {
@@ -68,10 +71,10 @@ namespace C969
                 try
                 {
                     var repo = new CustomerRepository();
-                    repo.Delete(customer.CustomerID);  
+                    repo.Delete(customer.CustomerID);
                     MessageBox.Show("Customer deleted.");
                     LoadCustomers();
-                    LoadAppointments(); 
+                    LoadAppointments();
                 }
                 catch (Exception ex)
                 {
@@ -149,6 +152,39 @@ namespace C969
                     MessageBox.Show("Error deleting appointment: " + ex.Message);
                 }
             }
+        }
+
+        private void monthCalendarAppointments_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            LoadCalendarForDate(e.Start);
+        }
+
+        private void LoadCalendarForDate(DateTime localDate)
+        {
+            //start/end of that day in local time
+            DateTime dayStartLocal = localDate.Date;
+            DateTime dayEndLocal = dayStartLocal.AddDays(1);
+
+            //convert to UTC for DB
+            DateTime dayStartUtc = TimeZoneInfo.ConvertTimeToUtc(dayStartLocal, TimeZoneInfo.Local);
+            DateTime dayEndUtc = TimeZoneInfo.ConvertTimeToUtc(dayEndLocal, TimeZoneInfo.Local);
+
+            var repo = new AppointmentRepository();
+            var appts = repo.GetInRange(dayStartUtc, dayEndUtc);
+
+            //convert to nice format for data grid
+            var view = appts.Select(a => new
+            {
+                a.AppointmentID,
+                a.CustomerName,
+                a.UserName,
+                a.Title,
+                a.Type,
+                Start = TimeZoneInfo.ConvertTimeFromUtc(a.StartUtc, TimeZoneInfo.Local),
+                End = TimeZoneInfo.ConvertTimeFromUtc(a.EndUtc, TimeZoneInfo.Local)
+            }).ToList();
+
+            dataGridViewCalendarAppointments.DataSource = view;
         }
     }
 }
