@@ -40,9 +40,13 @@
             buttonDeleteAppointment = new Button();
             dataGridViewAppointments = new DataGridView();
             tabCalendar = new TabPage();
-            tabReports = new TabPage();
-            monthCalendarAppointments = new MonthCalendar();
             dataGridViewCalendarAppointments = new DataGridView();
+            monthCalendarAppointments = new MonthCalendar();
+            tabReports = new TabPage();
+            dataGridViewReports = new DataGridView();
+            buttonGenerateReport = new Button();
+            labelReports = new Label();
+            comboBoxReportSelector = new ComboBox();
             tabScheduler.SuspendLayout();
             tabCustomers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridCustomers).BeginInit();
@@ -50,6 +54,8 @@
             ((System.ComponentModel.ISupportInitialize)dataGridViewAppointments).BeginInit();
             tabCalendar.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dataGridViewCalendarAppointments).BeginInit();
+            tabReports.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewReports).BeginInit();
             SuspendLayout();
             // 
             // tabScheduler
@@ -185,14 +191,15 @@
             tabCalendar.Text = "Calendar";
             tabCalendar.UseVisualStyleBackColor = true;
             // 
-            // tabReports
+            // dataGridViewCalendarAppointments
             // 
-            tabReports.Location = new Point(8, 46);
-            tabReports.Name = "tabReports";
-            tabReports.Size = new Size(1436, 635);
-            tabReports.TabIndex = 3;
-            tabReports.Text = "Reports";
-            tabReports.UseVisualStyleBackColor = true;
+            dataGridViewCalendarAppointments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCalendarAppointments.Dock = DockStyle.Bottom;
+            dataGridViewCalendarAppointments.Location = new Point(0, 329);
+            dataGridViewCalendarAppointments.Name = "dataGridViewCalendarAppointments";
+            dataGridViewCalendarAppointments.RowHeadersWidth = 82;
+            dataGridViewCalendarAppointments.Size = new Size(1436, 306);
+            dataGridViewCalendarAppointments.TabIndex = 1;
             // 
             // monthCalendarAppointments
             // 
@@ -204,15 +211,56 @@
             monthCalendarAppointments.TabIndex = 0;
             monthCalendarAppointments.DateSelected += monthCalendarAppointments_DateSelected;
             // 
-            // dataGridViewCalendarAppointments
+            // tabReports
             // 
-            dataGridViewCalendarAppointments.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCalendarAppointments.Dock = DockStyle.Bottom;
-            dataGridViewCalendarAppointments.Location = new Point(0, 335);
-            dataGridViewCalendarAppointments.Name = "dataGridViewCalendarAppointments";
-            dataGridViewCalendarAppointments.RowHeadersWidth = 82;
-            dataGridViewCalendarAppointments.Size = new Size(1436, 300);
-            dataGridViewCalendarAppointments.TabIndex = 1;
+            tabReports.Controls.Add(dataGridViewReports);
+            tabReports.Controls.Add(buttonGenerateReport);
+            tabReports.Controls.Add(labelReports);
+            tabReports.Controls.Add(comboBoxReportSelector);
+            tabReports.Location = new Point(8, 46);
+            tabReports.Name = "tabReports";
+            tabReports.Size = new Size(1436, 635);
+            tabReports.TabIndex = 3;
+            tabReports.Text = "Reports";
+            tabReports.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewReports
+            // 
+            dataGridViewReports.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewReports.Dock = DockStyle.Bottom;
+            dataGridViewReports.Location = new Point(0, 101);
+            dataGridViewReports.Name = "dataGridViewReports";
+            dataGridViewReports.RowHeadersWidth = 82;
+            dataGridViewReports.Size = new Size(1436, 534);
+            dataGridViewReports.TabIndex = 3;
+            // 
+            // buttonGenerateReport
+            // 
+            buttonGenerateReport.Location = new Point(385, 49);
+            buttonGenerateReport.Name = "buttonGenerateReport";
+            buttonGenerateReport.Size = new Size(150, 46);
+            buttonGenerateReport.TabIndex = 2;
+            buttonGenerateReport.Text = "Generate";
+            buttonGenerateReport.UseVisualStyleBackColor = true;
+            buttonGenerateReport.Click += buttonGenerateReport_Click;
+            // 
+            // labelReports
+            // 
+            labelReports.AutoSize = true;
+            labelReports.Location = new Point(4, 3);
+            labelReports.Name = "labelReports";
+            labelReports.Size = new Size(99, 32);
+            labelReports.TabIndex = 1;
+            labelReports.Text = "Reports:";
+            // 
+            // comboBoxReportSelector
+            // 
+            comboBoxReportSelector.FormattingEnabled = true;
+            comboBoxReportSelector.Items.AddRange(new object[] { "Appointment Types by Month", "User Schedules", "Customer Appointment Count" });
+            comboBoxReportSelector.Location = new Point(109, 3);
+            comboBoxReportSelector.Name = "comboBoxReportSelector";
+            comboBoxReportSelector.Size = new Size(426, 40);
+            comboBoxReportSelector.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -230,6 +278,9 @@
             ((System.ComponentModel.ISupportInitialize)dataGridViewAppointments).EndInit();
             tabCalendar.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)dataGridViewCalendarAppointments).EndInit();
+            tabReports.ResumeLayout(false);
+            tabReports.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridViewReports).EndInit();
             ResumeLayout(false);
         }
 
@@ -250,5 +301,9 @@
         private Button buttonAddAppointment;
         private MonthCalendar monthCalendarAppointments;
         private DataGridView dataGridViewCalendarAppointments;
+        private ComboBox comboBoxReportSelector;
+        private DataGridView dataGridViewReports;
+        private Button buttonGenerateReport;
+        private Label labelReports;
     }
 }

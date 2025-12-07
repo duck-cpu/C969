@@ -186,5 +186,92 @@ namespace C969
 
             dataGridViewCalendarAppointments.DataSource = view;
         }
+
+        //report menu 
+        private void buttonGenerateReport_Click(object sender, EventArgs e)
+        {
+            switch (comboBoxReportSelector.SelectedItem?.ToString())
+            {
+                case "Appointment Types by Month":
+                    Report_TypesByMonth();
+                    break;
+
+                case "User Schedules":
+                    Report_UserSchedules();
+                    break;
+
+                case "Customer Appointment Count":
+                    Report_CustomerAppointmentCount();
+                    break;
+
+                default:
+                    MessageBox.Show("Select a report.");
+                    break;
+            }
+        }
+
+        //report 1 with lambda
+        private void Report_TypesByMonth()
+        {
+            var repo = new AppointmentRepository();
+            var all = repo.GetAll();
+
+            var report = all
+                .Select(a => new
+                {
+                    Month = TimeZoneInfo.ConvertTimeFromUtc(a.StartUtc, TimeZoneInfo.Local).ToString("MMMM"),
+                    a.Type
+                })
+                .GroupBy(x => new { x.Month, x.Type })
+                .Select(g => new
+                {
+                    g.Key.Month,
+                    g.Key.Type,
+                    Count = g.Count()
+                })
+                .OrderBy(r => DateTime.ParseExact(r.Month, "MMMM", null).Month)
+                .ToList();
+            dataGridViewReports.DataSource = report;
+        }
+        //report 2 with lambda
+        private void Report_UserSchedules()
+        {
+            var repo = new AppointmentRepository();
+            var all = repo.GetAll();
+
+            var report = all
+                .Select(a => new
+                {
+                    a.UserName,
+                    a.Title,
+                    Start = TimeZoneInfo.ConvertTimeFromUtc(a.StartUtc, TimeZoneInfo.Local),
+                    End = TimeZoneInfo.ConvertTimeFromUtc(a.EndUtc, TimeZoneInfo.Local)
+                })
+                .OrderBy(r => r.UserName)
+                .ThenBy(r => r.Start)
+                .ToList();
+
+            dataGridViewReports.DataSource = report;
+        }
+
+        //report 3 with lambda
+        private void Report_CustomerAppointmentCount()
+        {
+            var repo = new AppointmentRepository();
+            var all = repo.GetAll();
+
+            var report = all
+                .GroupBy(a => a.CustomerName)
+                .Select(g => new
+                {
+                    Customer = g.Key,
+                    Count = g.Count()
+                })
+                .OrderByDescending(r => r.Count)
+                .ToList();
+
+            dataGridViewReports.DataSource = report;
+        }
+
     }
 }
